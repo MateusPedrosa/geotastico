@@ -5,6 +5,7 @@ import os
 import random
 import speech_recognition as sr
 from location import Location
+from dtw import *
 
 def get_random_location(countries_dir_path):
     location = Location()
@@ -42,3 +43,19 @@ def record_guess():
 
 def verify_guess(guess, location):
     return guess == location.country
+
+# codebook: dictionary {'country': array}
+def recognize_guess(query, codebook):
+    threshold = 100
+    min_d = None
+    for key, value in codebook.items():
+        distance = dtw(query, value)
+        if min_d == None or distance < min_d:
+            min_d = distance
+            country = key
+
+    if min_d > threshold:
+        # guessed country is not on codebook
+        return None
+
+    return country
