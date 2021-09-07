@@ -1,16 +1,26 @@
 import numpy as np
+import librosa
 
-# def centroid(*arrays):
-#     min_dist = None
-#     for a in arrays:
-#         sum = 0
-#         for b in arrays:
-#             sum += np.linalg.norm(a-b)
-#         if min_dist == None or sum < min_dist:
-#             min_dist = sum
-#             centroid = a
+def extract_features_from_file(audio_file_path):
+    y, sr = librosa.load(audio_file_path)
 
-#     return centroid
+    return extract_features(y)
+
+def extract_features(array):
+    return librosa.lpc(array, 2)
+
+def centroid(*arrays):
+    min_d = None
+    for i in range(arrays):
+        distance = 0
+        for j in range(arrays):
+            if j != i:
+                distance += dtw(arrays[i], arrays[j])
+        if min_d == None or distance < min_d:
+            min_d = distance
+            centroid = arrays[i]
+
+    return centroid
 
 def d(a,b):
     return np.linalg.norm(a-b)
