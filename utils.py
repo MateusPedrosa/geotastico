@@ -4,26 +4,28 @@
 import os
 import random
 import speech_recognition as sr
+from location import Location
 
 def get_random_location(countries_dir_path):
-    location_path = countries_dir_path
+    location = Location()
+    path = countries_dir_path
 
-    dir_content = os.listdir(location_path)
+    dir_content = os.listdir(path)
     countries = [i for i in dir_content if os.path.isdir(i)]
-    country = random.choice(countries)
-    location_path += '/' + country
+    location.country = random.choice(countries)
+    path += '/' + location.country
 
-    dir_content = os.listdir(location_path)
+    dir_content = os.listdir(path)
     cities = [i for i in dir_content if os.path.isdir(i)]
-    city = random.choice(cities)
-    location_path += '/' + city
+    location.city = random.choice(cities)
+    path += '/' + location.city
 
-    dir_content = os.listdir(location_path)
+    dir_content = os.listdir(path)
     locations = [i for i in dir_content if os.path.isfile(i)]
-    location = random.choice(locations)
-    location_path += '/' + location
+    path += '/' + random.choice(locations)
+    location.path = path
 
-    return [country, city, location_path]
+    return location
 
 def record_guess():
     mic = sr.Recognizer()
@@ -38,5 +40,5 @@ def record_guess():
         
     return sentence
 
-def verify_guess(guess, country):
-    return guess == country
+def verify_guess(guess, location):
+    return guess == location.country
