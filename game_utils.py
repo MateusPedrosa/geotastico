@@ -6,24 +6,30 @@ import random
 import speech_recognition as sr
 from location import Location
 from dtw import *
+import unidecode
 
-def get_random_location(countries_dir_path):
+def get_random_location(countries_dir_path, windows=False):
+    if windows:
+        separator = '\\'
+    else:
+        separator = '/'
+    
     location = Location()
     path = countries_dir_path
 
     dir_content = os.listdir(path)
-    countries = [i for i in dir_content if os.path.isdir(i)]
+    countries = [i for i in dir_content if os.path.isdir(path + separator + i)]
     location.country = random.choice(countries)
-    path += '/' + location.country
+    path += separator + location.country
 
     dir_content = os.listdir(path)
-    cities = [i for i in dir_content if os.path.isdir(i)]
+    cities = [i for i in dir_content if os.path.isdir(path + separator + i)]
     location.city = random.choice(cities)
-    path += '/' + location.city
+    path += separator + location.city
 
     dir_content = os.listdir(path)
-    locations = [i for i in dir_content if os.path.isfile(i)]
-    path += '/' + random.choice(locations)
+    locations = [i for i in dir_content if os.path.isfile(path + separator + i)]
+    path += separator + random.choice(locations)
     location.path = path
 
     return location
@@ -36,13 +42,13 @@ def record_guess():
         
     try:
         sentence = mic.recognize_google(audio,language='pt-BR')
-    except sr.UnkownValueError:
+    except sr.UnknownValueError:
         sentence = "unknown"
         
     return sentence
 
 def verify_guess(guess, location):
-    return guess == location.country
+    return unidecode.unidecode(guess).lower() == location.country
 
 # codebook: dictionary {'country': array}
 def recognize_guess(query, codebook):
