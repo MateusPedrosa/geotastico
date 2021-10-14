@@ -97,7 +97,6 @@ def record_and_verify_guess(controller,windows=False):
     if verify_guess(sentence,location):
         global score
         score += 1
-        print(score)
         get_random_location(controller.frames["PageOne"],countries_path, windows)
         controller.show_frame("PageOne")
     else:
