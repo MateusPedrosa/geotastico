@@ -102,7 +102,7 @@ def record_and_verify_guess(controller,windows=False):
         controller.show_frame("PageOne")
     else:
         controller.frames["PageTwo"].label2.configure(text="A localização correta era: " + location.city + ", " + location.country)
-        controller.frames["PageTwo"].label3.configure(text="Número de países acertados: " + str(score))
+        controller.frames["PageTwo"].label3.configure(text="Total de acertos: " + str(score))
         controller.show_frame("PageTwo")
 
 
